@@ -17,7 +17,7 @@ function createInvoice(invoice, path) {
   generateHeader(doc, invoice);
   generateCustomerInformation(doc, invoice);
   generateInvoiceTable(doc, invoice);
-  generateBankInfo(doc, invoice);
+  if(!!invoice.bankInfo) generateBankInfo(doc, invoice);
   // generateFooter(doc);
 
   doc.end();
