@@ -49,7 +49,7 @@ function generateCustomerInformation(doc, invoice) {
     .text("Invoice", 50, customerInfoTop)
     .fontSize(16)
     .font("Helvetica-Bold")
-    .text(formatNo(currentDate), 150, customerInfoTop + 3)
+    .text(formatNo(currentDate), 117, customerInfoTop + 3)
     .font("Helvetica")
     .fontSize(12)
     .text("Bill to:", 300, customerInfoTop + 5);
@@ -71,19 +71,19 @@ function generateCustomerInformation(doc, invoice) {
     )
 
     .font("Helvetica-Bold")
-    .text(invoice.shipping.name, 300, customerInformationTop)
+    .text(invoice.billTo.name, 300, customerInformationTop)
     .font("Helvetica")
-    .text(invoice.shipping.address, 300, customerInformationTop + 15)
+    .text(invoice.billTo.address, 300, customerInformationTop + 15)
     .text(
-      invoice.shipping.city +
+      invoice.billTo.city +
       ", " +
-      invoice.shipping.state +
+      invoice.billTo.state +
       " " +
-      invoice.shipping.postal_code,
+      invoice.billTo.postal_code,
       300,
       customerInformationTop + 30
     )
-    .text(invoice.shipping.country, 300, customerInformationTop + 45)
+    .text(invoice.billTo.country, 300, customerInformationTop + 45)
     .moveDown();
 
   generateHr(doc, customerInformationTop + 62);
@@ -108,7 +108,7 @@ function generateInvoiceTable(doc, invoice) {
 
   for (i = 0; i < invoice.items.length; i++) {
     const item = invoice.items[i];
-    const itemName = item.item.startsWith('Salary for') ? item.item + ' ' + currentDate.toLocaleString('en-us', { month: 'long' }) : item.item;
+    const itemName = item.item.appendMonthName ? item.item + ' ' + currentDate.toLocaleString('en-us', { month: 'long' }) : item.item;
     const position = invoiceTableTop + (i + 1) * 30;
     generateTableRow(
       doc,

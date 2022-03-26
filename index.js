@@ -1,56 +1,27 @@
 const { createInvoice } = require("./createInvoice.js");
+const { invoice } = require("./invoice.js");
+const { send } = require('./mail');
 
-const invoice = {
-  user: "Nikola Mandic",
-  companyName: ['', ''],
-  currency: "USD",
-  shipping: {
-    name: "",
-    address: "",
-    city: "",
-    state: "",
-    country: "",
-    postal_code: ''
-  },
-  items: [
-    {
-      item: "Salary for",
-      quantity: 1,
-      amount: 2
-    },
-    {
-      item: "a",
-      quantity: 1,
-      amount: 3
-    }
-  ],
-  paid: 0,
-  bankInfo: {
-    intermediary: [
-      '56A: Intermediary:',
-      'BANK ',
-      'SWIFT CODE:'
-    ],
-    institutionAccount: [
-      '57A: Account with institution:',
-      '.',
-      'SWIFT CODE: '
-    ],
-    customer: [
-      '59: Beneficiary Customer:',
-      '',
-      '',
-      '',
-      '',
-      ''
-    ]
+const dateNow = new Date();
+const invoiceDir = './invoices/'
+const checkDir = dir => {
+  const fs = require('fs');
+
+  if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
   }
-};
-
-const invoiceName = () => {
-  const dateNow = new Date();
-  const dateFormat = dateNow.getFullYear() + '-' + dateNow.getDate() + '-' + dateNow.getDay();
-  const nameFormat = dateFormat + ' - ' + invoice.user + ' Invoice';
-  return `${nameFormat} #${dateNow.getFullYear().toString().slice(-2)}${dateNow.getMonth().toString().padStart(2, '0')}.pdf`
 }
-createInvoice(invoice, invoiceName());
+const name = () => {
+  const dateFormat = dateNow.getFullYear() + '-' + dateNow.getDate() + '-' + dateNow.getDay();
+  const nameFormat = dateFormat + ' - ' + invoice.user;
+  return nameFormat;
+}
+const invoiceName = () => {
+  return `${name()} - Invoice #${dateNow.getFullYear().toString().slice(-2)}${dateNow.getMonth().toString().padStart(2, '0')}.pdf`
+}
+const mailMessage = () => {
+  return `${name()} - admin costs`
+}
+checkDir(invoiceDir);
+createInvoice(invoice, invoiceDir + invoiceName());
+send(invoiceName(), invoiceDir + invoiceName(), mailMessage());
