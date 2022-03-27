@@ -1,0 +1,28 @@
+# This workflow will do a clean installation of node dependencies, build PDF invoice and email it.
+
+name: Generate PDF invoice and email it
+on:
+#   schedule: #uncomment line to allow scheduled emails
+#   - cron: '0 13 26 * *' #uncomment line to allow scheduled emails
+  # run sheduled job every 26. day in a month at 13:00 UTC
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and run
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm install
+    - run: npm start
