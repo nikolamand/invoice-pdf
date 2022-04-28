@@ -16,8 +16,8 @@ function createInvoice(invoice, path) {
 
   generateHeader(doc, invoice);
   generateCustomerInformation(doc, invoice);
-  generateInvoiceTable(doc, invoice);
-  if(!!invoice.bankInfo) generateBankInfo(doc, invoice);
+  const invoiceTablePosition = generateInvoiceTable(doc, invoice);
+  if(!!invoice.bankInfo) generateBankInfo(doc, invoice, invoiceTablePosition);
   // generateFooter(doc);
 
   doc.end();
@@ -134,10 +134,11 @@ function generateInvoiceTable(doc, invoice) {
     "Total:",
     formatCurrency(total)
   );
+  return subtotalPosition;
 }
 
-function generateBankInfo(doc, invoice) {
-  const bankInfoTop = 470;
+function generateBankInfo(doc, invoice, invoiceTablePosition) {
+  const bankInfoTop = invoiceTablePosition + 50;
   doc
     .fontSize(10)
     .font("Helvetica-Bold")
